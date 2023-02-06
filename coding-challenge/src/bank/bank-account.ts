@@ -1,9 +1,5 @@
-import {v4 as uuid} from 'uuid';
-
-interface ErrorMessages {
-    amountHasToBeGreaterThanZero: string;
-    insufficientFounds: string;
-}
+import { v4 as uuid } from 'uuid';
+import { ValidateErrorMessagesForAmountActions } from './interfaces'
 
 export class BankAccount {
     private balance: number = 0;
@@ -15,7 +11,10 @@ export class BankAccount {
         this.accountNumber = uuid();
     }
 
-    private validateRequestedAmount(amount: number, errorMessages: ErrorMessages) {
+    private validateRequestedAmount(
+        amount: number,
+        errorMessages: ValidateErrorMessagesForAmountActions
+    ) {
         if (amount <= 0) {
             throw new Error(errorMessages.amountHasToBeGreaterThanZero);
         }
@@ -26,7 +25,7 @@ export class BankAccount {
     }
 
     private validateWithdraw(withdrawAmount: number) {
-        const errorMessages: ErrorMessages = {
+        const errorMessages: ValidateErrorMessagesForAmountActions = {
             amountHasToBeGreaterThanZero: 'Withdraw amount has to be greater than 0!',
             insufficientFounds: 'Insufficient funds!',
         };
@@ -35,7 +34,7 @@ export class BankAccount {
     }
 
     private validateTransferAmount(transferAmount: number) {
-        const errorMessages: ErrorMessages = {
+        const errorMessages: ValidateErrorMessagesForAmountActions = {
             amountHasToBeGreaterThanZero: 'Deposit amount has to be greater than 0" error!',
             insufficientFounds: 'Insufficient funds!',
         };
