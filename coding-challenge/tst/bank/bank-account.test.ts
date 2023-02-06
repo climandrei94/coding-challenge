@@ -1,4 +1,4 @@
-import {BankAccount} from "../../src/bank/bank-account";
+import { BankAccount } from "../../src/bank/bank-account";
 
 describe('Tests for bank account class', () => {
     let bankAccount: BankAccount;
@@ -106,6 +106,10 @@ describe('Tests for bank account class', () => {
         const destinationAccount = new BankAccount('DestinationAccount');
         const expectedCurrentBalanceAfterTransfer = initialBalance
 
+
+        jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
+            bankAccount['balance'] -= transferAmount;
+        });
         jest.spyOn(BankAccount.prototype, 'deposit').mockImplementationOnce(() => {
             throw new Error('Transfer failed')
         })
