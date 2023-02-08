@@ -58,20 +58,18 @@ describe('Tests for bank account class', () => {
     //#region Deposit
 
     it('should throw a "Deposit amount has to be greater than 0" error!', () => {
-        const transferAmount = -1
-        const destinationBankAccount = new BankAccount('DestinationAccount')
+        const depositAmount = -1
 
         expect(() => { 
-            bankAccount.transfer(transferAmount, destinationBankAccount)
+            bankAccount.deposit(depositAmount)
         }).toThrow('Deposit amount has to be greater than 0" error!')
     });
 
     it('should update the account balance with the specified sum!', () => {
-        const transferAmount = 5
-        const destinationBankAccount = new BankAccount('DestinationAccount')
-        const expectedCurrentBalanceAfterTransfer = initialBalance - transferAmount
+        const depositAmount = 5
+        const expectedCurrentBalanceAfterTransfer = initialBalance + depositAmount
 
-        bankAccount.transfer(transferAmount, destinationBankAccount)
+        bankAccount.deposit(depositAmount)
 
         expect(bankAccount['balance']).toEqual(expectedCurrentBalanceAfterTransfer)
     });

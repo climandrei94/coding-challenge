@@ -11,35 +11,20 @@ export class BankAccount {
         this.accountNumber = uuid();
     }
 
-    private validateRequestedAmount(
-        amount: number,
-        errorMessages: ValidateErrorMessagesForAmountActions
-    ) {
-        if (amount <= 0) {
-            throw new Error(errorMessages.amountHasToBeGreaterThanZero);
-        }
-
-        if (this.balance <= amount) {
-            throw new Error(errorMessages.insufficientFounds);
-        }
-    }
-
     private validateWithdraw(withdrawAmount: number) {
-        const errorMessages: ValidateErrorMessagesForAmountActions = {
-            amountHasToBeGreaterThanZero: 'Withdraw amount has to be greater than 0!',
-            insufficientFounds: 'Insufficient funds!',
-        };
+        if(withdrawAmount <= 0) {
+            throw new Error('Withdraw amount has to be greater than 0!')
+        }
 
-        this.validateRequestedAmount(withdrawAmount, errorMessages);
+        if( this.balance < withdrawAmount ) {
+            throw new Error('Insufficient funds!')
+        }
     }
 
-    private validateTransferAmount(transferAmount: number) {
-        const errorMessages: ValidateErrorMessagesForAmountActions = {
-            amountHasToBeGreaterThanZero: 'Deposit amount has to be greater than 0" error!',
-            insufficientFounds: 'Insufficient funds!',
-        };
-
-        this.validateRequestedAmount(transferAmount, errorMessages);
+    private validateDepositAmount(depositAmount: number) {
+        if(depositAmount <= 0) {
+            throw new Error('Deposit amount has to be greater than 0" error!')
+        }
     }
 
     withdraw(withdrawAmount: number) {
@@ -49,23 +34,23 @@ export class BankAccount {
     }
 
     deposit(depositAmount: number) {
+        this.validateDepositAmount(depositAmount)
+
         this.balance += depositAmount;
     }
 
-    checkBalance() {
+    checkBalance(): number {
         return this.balance;
     }
 
     transfer(transferAmount: number, destinationBankAccount: BankAccount) {
         // This method should take a sum out of the source account and transfer it to the destination bank account.
-        this.validateTransferAmount(transferAmount);
-
         this.withdraw(transferAmount)
         try {
             destinationBankAccount.deposit(transferAmount)
         } catch (error) {
             this.deposit(transferAmount)
-            throw new Error('Transfer have failed!')
+            throw new Error(error)
         }
     }
 }
